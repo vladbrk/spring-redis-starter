@@ -6,8 +6,8 @@ import org.springframework.data.redis.connection.MessageListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MessageSubscriber implements MessageListener {
-    public static List<String> messageList = new ArrayList<String>();
+public class MessageListenerImpl implements MessageListener {
+    public static List<String> messageList = new ArrayList<>();
 
     @Override
     public void onMessage(final Message message, final byte[] pattern) {
