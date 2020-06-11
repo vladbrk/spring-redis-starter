@@ -12,6 +12,8 @@ public class MessageListenerImpl implements MessageListener {
     @Override
     public void onMessage(final Message message, final byte[] pattern) {
         messageList.add(message.toString());
-        System.out.println("Message received: " + new String(message.getBody()));
+        String channel = new String(message.getChannel());
+        String body = new String(message.getBody());
+        System.out.println(String.format("Message received. Channel: %s, body: %s", channel, body));
     }
 }

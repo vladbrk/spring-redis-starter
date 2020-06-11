@@ -2,6 +2,7 @@ package org.biryukov.repo.impl;
 
 import org.biryukov.model.Movie;
 import org.biryukov.repo.RedisRepository;
+import org.biryukov.service.MessagePublisher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -14,10 +15,12 @@ import java.util.Map;
 public class RedisRepositoryImpl implements RedisRepository {
     private static final String KEY = "Movie";
     private RedisTemplate<String, Object> redisTemplate;
+    private MessagePublisher redisPublisher;
     private HashOperations hashOperations;
     @Autowired
-    public RedisRepositoryImpl(RedisTemplate<String, Object> redisTemplate){
+    public RedisRepositoryImpl(RedisTemplate<String, Object> redisTemplate, MessagePublisher redisPublisher){
         this.redisTemplate = redisTemplate;
+        this.redisPublisher = redisPublisher;
     }
     @PostConstruct
     private void init(){
@@ -25,6 +28,7 @@ public class RedisRepositoryImpl implements RedisRepository {
     }
     public void add(final Movie movie) {
         hashOperations.put(KEY, movie.getId(), movie.getName());
+        redisPublisher.publish("Published: " + movie.getId());
     }
     public void delete(final String id) {
         hashOperations.delete(KEY, id);
